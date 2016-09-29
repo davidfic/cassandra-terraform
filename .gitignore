@@ -1,0 +1,10 @@
+**/__plan-to-apply
+**/.terraform
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/.venv
+**/.ini
+**/inventory
+playbook-main.retry
+*env.sh
+*.pem
