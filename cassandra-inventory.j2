@@ -1,0 +1,73 @@
+#
+# Inventory for provisioning Cassandra
+#
+
+#####################
+# Cassandra         #
+#####################
+{% for resource in resources %}
+{% for key, value in resource.iteritems() -%}
+{% if "cassandra" in key %}
+{#
+Each cassandra node needs it's own identifier take the
+key which is of the form aws_instance.cassandra.0 and remove
+everything except the final number. The iniventory file will end up
+having something like the following
+
+[cassandra_node_1]
+x.x.x.x
+
+[cassandra_node_2]
+x.x.x.x
+#}
+[cassandra_node_{{key|replace("aws_instance.cassandra-", "")}}]
+{{ value.primary.attributes.public_ip }} ansible_ssh_user=ubuntu
+
+[cassandra_node_{{key|replace("aws_instance.cassandra-", "")}}:vars]
+cassandra_node_name=cassandra-{{key|replace("aws_instance.cassandra-", "")}}
+
+{% endif %}
+{%- endfor %}
+
+[cassandra_nodes:children]
+{% for key, value in resource.iteritems() -%}
+{% if "cassandra" in key -%}
+cassandra_node_{{key|replace("aws_instance.cassandra-", "")}}
+{# new line #}
+{%- endif %}
+{%- endfor %}
+
+[plain_cassandra_nodes]
+{% for key, value in resource.iteritems() -%}
+{% if "cassandra" in key -%}
+{{ value.primary.attributes.public_ip }} node_ip={{ value.primary.attributes.private_ip }} repair_weekday={{ ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']|random }} seed=true dc=DC1 rack=RAC1
+{# new line #}
+{%- endif %}
+{%- endfor %}
+
+[opscenter_nodes]
+{% for key, value in resource.iteritems() -%}
+{% if "cassandra-1" in key -%}
+{{ value.primary.attributes.public_ip }} node_ip={{ value.primary.attributes.private_ip }} repair_weekday={{ ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']|random }} seed=true dc=DC1 rack=RAC1
+{# new line #}
+{%- endif %}
+{%- endfor %}
+
+[cassandra_nodes:vars]
+spark_enabled=false
+s3_backup_enabled=false
+s3_backup_environment=aws
+s3_backup_keyspaces=todo
+repair_start_hour=02
+repair_start_minute=0
+install_user=ubuntu
+deployment_environment=aws
+install_version=dce
+opscenter_enabled=true
+{#s3_backup_environment=aws
+s3_backup_host=<host>
+s3_backup_bucket=<bucket>
+s3_backup_keyspaces=<keyspace>
+s3_backup_access_key=<access_key>
+s3_backup_secret_key=<secret_key>#}
+{% endfor %}
