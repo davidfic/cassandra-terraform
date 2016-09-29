@@ -26,7 +26,7 @@ export AWS_DEFAULT_REGION="us-east-1"
 
 Use the env template to get up and running quickly.
 ```
-cp template-env.sh dev-env.sh
+cp env-template.sh dev-env.sh
 ```
 then modify `dev-env.sh` to match your environment.
 

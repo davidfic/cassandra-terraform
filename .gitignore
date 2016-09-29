@@ -3,7 +3,7 @@
 **/terraform.tfstate
 **/terraform.tfstate.backup
 **/.venv
-**/.ini
+**.ini
 **/inventory
 playbook-main.retry
 *env.sh
