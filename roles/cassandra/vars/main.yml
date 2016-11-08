@@ -1,7 +1,7 @@
 dsc_version: 3.0.8-1
 cassandra_version: 3.0.8
 cassandra_tools_version: 3.0.8
-
 dse_version: 4.7.0-1
 
 tablesnap_version: debian/0.7.1-3
+cassandra_config_dir: /etc/cassandra/conf

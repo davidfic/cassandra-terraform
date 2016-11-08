@@ -71,9 +71,9 @@ deploy () {
     echo "Running ansible playbook:
     ansible-playbook playbook-main.yml \
     -i ${INVENTORYFILE} \
-    -e user=ubuntu
+    -e user=centos
     "
     ansible-playbook playbook-main.yml \
     -i $inventory \
-    -e user=ubuntu
+    -e user=centos
 }

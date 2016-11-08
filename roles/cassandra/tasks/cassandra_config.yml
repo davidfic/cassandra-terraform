@@ -27,9 +27,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-- name: Set cassandra_config_dir fact (DCE)
-  when: install_version == "dce"
-  set_fact: cassandra_config_dir=/etc/cassandra
+# - name: Set cassandra_config_dir fact (DCE)
+#   when: install_version == "dce"
+#  set_fact: cassandra_config_dir=/etc/cassandra
 
 - name: Set cassandra_config_dir fact (DSE)
   when: install_version == "dse"
@@ -65,7 +65,7 @@
 
 - name: Install Datastax Community Cassandra & tools
   when: install_version == "dce"
-  apt: pkg={{item}} state=present
+  package: name=datastax-ddc state=present
   register: cassandra_installed_dce
   with_items:
   - dsc30={{ dsc_version }}
@@ -75,24 +75,24 @@
 - name: Install Datastax Enterprise Cassandra
   when: install_version == "dse"
   register: cassandra_installed_dse
-  apt: pkg={{item}} state=present
+  package: name={{item}} state=present
   with_items:
   - dse-full={{ dse_version }}
 
 - name: get cassandra_installed variable
   set_fact: cassandra_installed="{{ cassandra_installed_dce.changed if install_version == 'dce' else cassandra_installed_dse.changed }}"
 
-- name: Wait for server autostart
-  when: "{{ init_server | default(false) }} == true and {{ cassandra_installed }} == true"
-  wait_for: path=/var/log/cassandra/system.log search_regex="Starting listening for CQL clients"
+# - name: Wait for server autostart
+#   when: "{{ init_server | default(false) }} == true and {{ cassandra_installed }} == true"
+#   wait_for: path=/var/log/cassandra/system.log search_regex="Starting listening for CQL clients"
 
-- name: Stop Cassandra DCE (autostarted on install)
-  when: "{{ init_server | default(false) }} == true and install_version == 'dce'"
-  service: name=cassandra state=stopped
-
-- name: Stop Cassandra DSE (autostarted on install)
-  when: "{{ init_server | default(false) }} == true and install_version == 'dse'"
-  service: name=dse state=stopped
+# - name: Stop Cassandra DCE (autostarted on install)
+#   when: "{{ init_server | default(false) }} == true and install_version == 'dce'"
+#   service: name=cassandra state=stopped
+#
+# - name: Stop Cassandra DSE (autostarted on install)
+#   when: "{{ init_server | default(false) }} == true and install_version == 'dse'"
+#   service: name=dse state=stopped
 
 - name: Clear Cassandra logs (after autostart)
   when: "{{ init_server | default(false) }} == true"
@@ -165,6 +165,11 @@
   when: install_version == "dse"
 
 - name: Cassandra DCE startup
+  when: install_version == "dce"
+  systemd: state=restarted daemon_reload=yes name=cassandra
+  #service: name=cassandra state=started
+
+- name: Cassandra DCE startup Really
   when: install_version == "dce"
   service: name=cassandra state=restarted
 

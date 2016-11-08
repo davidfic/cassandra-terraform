@@ -21,7 +21,7 @@ x.x.x.x
 x.x.x.x
 #}
 [cassandra_node_{{key|replace("aws_instance.cassandra-", "")}}]
-{{ value.primary.attributes.public_ip }} ansible_ssh_user=ubuntu
+{{ value.primary.attributes.public_ip }} ansible_ssh_user=centos
 
 [cassandra_node_{{key|replace("aws_instance.cassandra-", "")}}:vars]
 cassandra_node_name=cassandra-{{key|replace("aws_instance.cassandra-", "")}}
@@ -60,10 +60,10 @@ s3_backup_environment=aws
 s3_backup_keyspaces=todo
 repair_start_hour=02
 repair_start_minute=0
-install_user=ubuntu
+install_user=centos
 deployment_environment=aws
 install_version=dce
-opscenter_enabled=true
+opscenter_enabled=false
 {#s3_backup_environment=aws
 s3_backup_host=<host>
 s3_backup_bucket=<bucket>

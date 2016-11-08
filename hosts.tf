@@ -23,7 +23,7 @@ resource "aws_instance" "cassandra-1" {
     }
 
     connection {
-    	user = "ubuntu"
+    	user = "centos"
     	key_file = "${var.key_path}"
     }
     // format and mount the EBS volume
@@ -35,8 +35,8 @@ resource "aws_instance" "cassandra-1" {
       "sudo mount /dev/xvdh /data",
       "echo '/dev/xvdf  /data  ext4  defaults,nofail,nobootwait  0 0' | sudo tee -a /etc/fstab",
       "sudo mount -a",
-      "sudo apt-get -y install python",
-      "sudo apt-get -y install git"
+      "sudo yum install -y python27",
+      "sudo yum install -y git"
       ]
     }
 }
@@ -67,7 +67,7 @@ resource "aws_instance" "cassandra-2" {
     }
 
     connection {
-    	user = "ubuntu"
+    	user = "centos"
     	key_file = "${var.key_path}"
     }
     // format and mount the EBS volume
@@ -79,8 +79,8 @@ resource "aws_instance" "cassandra-2" {
       "sudo mount /dev/xvdh /data",
       "echo '/dev/xvdf  /data  ext4  defaults,nofail,nobootwait  0 0' | sudo tee -a /etc/fstab",
       "sudo mount -a",
-      "sudo apt-get -y install python",
-      "sudo apt-get -y install git"
+      "sudo yum install -y python27",
+      "sudo yum install -y git"
       ]
     }
 }

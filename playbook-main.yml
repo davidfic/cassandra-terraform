@@ -1,7 +1,7 @@
 ---
 # Cassandra Ansible Playbook
 - hosts: cassandra_nodes:children
-  user: ubuntu
+  user: centos
   become: yes
   vars:
     init_server: true
@@ -14,7 +14,8 @@
       no_proxy: 'localhost,127.0.0.1'
 
   roles:
+    - { role: java, tags: ['java'] }
     - { role: cassandra_common, tags: ['cassandra_common'] }
     - { role: cassandra, tags: ['cassandra'] }
-    - { role: opscenter, tags: ['opscenter'], when: install_version == "dse" and (opscenter_enabled | default(false)) == "true"  }
+    # - { role: opscenter, tags: ['opscenter'], when: install_version == "dse" and (opscenter_enabled | default(false)) == "true"  }
     - { role: cassandra_cron, tags: ['cron'] }

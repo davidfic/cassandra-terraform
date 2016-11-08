@@ -11,10 +11,10 @@ variable "source_cidr_block" {
   default = "0.0.0.0/0"
 }
 
-# Ubuntu 16.04 LTS AMI Linux
+# CentOS Linux 7 x86_64 HVM EBS
 variable "ami" {
     default = {
-        us-east-1 = "ami-8fe79998"
+        us-east-1 = "ami-6d1c2007"
     }
 }
 
@@ -42,7 +42,7 @@ variable "ebs_size_gb" {
 }
 
 variable "environment" {
-  description = "environment name to tag instace with"
+  description = "environment name to tag instance with"
 }
 
 variable "az1_pub_subnet_cidr" {
