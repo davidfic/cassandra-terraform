@@ -61,3 +61,8 @@ variable "subnet_id_1" {
 variable "subnet_id_2" {
   description = "second subnet id"
 }
+
+variable "count" {
+  description = "how many cassandra nodes do you want"
+  default = 2
+}
